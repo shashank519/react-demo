@@ -1,7 +1,7 @@
 const registerUser = {
   firstName: 'Shashank',
   lastName: 'Dave',
-  age: 0,
+  email: 'shashank@gmail.com',
   address: 'Udaipur(Rajasthan)',
   mobile: 0
 };
@@ -14,7 +14,7 @@ const registerUserReducer = (state = registerUser, action) => {
     	return {...state};
     }
     case 'CLEAR_REGISTEATION_FORM' : {
-    	return {...state, firstName: '', lastName: '', age: '', address: '', mobile: ''};
+    	return {...state, firstName: '', lastName: '', email: '', address: '', mobile: ''};
     }
     default:
       return state

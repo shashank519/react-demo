@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import registerUserReducer from './register-user';
+import appDrawerReducer from "./app-drawer";
 
 export default combineReducers({
-  regUserReducer: registerUserReducer
+  regUserReducer: registerUserReducer,
+  appDrawer: appDrawerReducer
 })

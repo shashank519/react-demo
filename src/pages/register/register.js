@@ -2,6 +2,8 @@ import React from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
+import { withRouter } from "react-router";
+
 import { fillDetails, registerUsers, clearRegistrationForm } from '../../actions/register-user-actions';
 
 const style = {
@@ -15,8 +17,8 @@ class Register extends React.Component {
 	}
 
 	registerUser() {
-		const {firstName, lastName, age, address, mobile} = this.props;
-		this.props.registerUsers({firstName, lastName, age, address, mobile});
+		const {firstName, lastName, email, address, mobile} = this.props;
+		this.props.registerUsers({firstName, lastName, email, address, mobile});
 	}
 
 	clearRegistrationForm(){
@@ -24,7 +26,7 @@ class Register extends React.Component {
 	}
 
   render() {
-  	const {firstName, lastName, age, address, mobile} = this.props;
+  	const {firstName, lastName, email, address, mobile} = this.props;
     return (
       <div>
         <TextField
@@ -40,10 +42,10 @@ class Register extends React.Component {
 		      value={lastName}
 		    /><br />
 		    <TextField
-		      hintText="Age"
-		      name="age"
+		      hintText="Email"
+		      name="email"
 		      onChange={(e)=>this.changeField(e)}
-		      value={age}
+		      value={email}
 		    /><br />
 		    <TextField
 		      hintText="Address"
@@ -65,9 +67,15 @@ class Register extends React.Component {
 }
 
 const mapStateToProps = ({regUserReducer}) => {
-	const {firstName, lastName, age, mobile, address} = regUserReducer;
+	const {firstName, lastName, email, mobile, address} = regUserReducer;
 
-	return {firstName, lastName, age, mobile, address};
+	return {firstName, lastName, email, mobile, address};
 }
 
-export default connect(mapStateToProps, {fillDetails, registerUsers, clearRegistrationForm})(Register)
+export default withRouter(
+  connect(mapStateToProps, {
+    fillDetails,
+    registerUsers,
+    clearRegistrationForm
+  })(Register)
+)
