@@ -4,8 +4,10 @@ const registerUser = {
   email: 'shashank@gmail.com',
   address: 'Udaipur(Rajasthan)',
   mobile: 0,
+  password: '',
   regUserResponse: {},
-  showNotification: false
+  showNotification: false,
+  notifyMessage: ''
 };
 
 const registerUserReducer = (state = registerUser, action) => {
@@ -13,13 +15,16 @@ const registerUserReducer = (state = registerUser, action) => {
     case 'FILL_DETAILS' : 
       return {...state, [action.name]: action.value};
     case 'REGISTER_USER' : {
-    	return { ...state, regUserResponse: action.payload, showNotification : !state.showNotification};
+    	return {...state, regUserResponse: action.payload, notifyMessage: action.payload.data.message, showNotification : !state.showNotification};
     }
     case 'CLEAR_REGISTEATION_FORM' : {
-    	return {...state, firstName: '', lastName: '', email: '', address: '', mobile: ''};
+    	return {...state, firstName: '', lastName: '', email: '', address: '', mobile: '', password: ''};
     }
-    case 'SHOW_NOTIFICATION': {
-      return{...state, showNotification: action.val};
+    case 'TOGGLE_NOTIFICATION': {
+      return{...state, showNotification: !state.showNotification, notifyMessage: action.msg};
+    }
+    case 'RESET_REGISTRATION_FORM': {
+      return{...state, ...registerUser};
     }
     default:
       return state;

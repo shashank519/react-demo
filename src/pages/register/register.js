@@ -9,7 +9,8 @@ import {
   fillDetails,
   registerUsers,
   clearRegistrationForm,
-  handleNotificationClose
+  handleNotificationClose,
+  resetRegistrationForm
 } from "../../actions/register-user-actions";
 
 const style = {
@@ -23,40 +24,61 @@ class Register extends React.Component {
   }
 
   registerUser() {
-    const { firstName, lastName, email, address, mobile } = this.props;
-    this.props.registerUsers({ firstName, lastName, email, address, mobile });
+    const { firstName, lastName, email, address, mobile, password } = this.props;
+    if(!(email.length && password.length)){
+      this.toggleNotification(false, 'Email and Password are mandatory.')
+      return;
+    }
+    this.props.registerUsers({ firstName, lastName, email, address, mobile, password });
   }
 
   clearRegistrationForm() {
     this.props.clearRegistrationForm();
   }
 
+  toggleNotification(val, msg){
+    let msgStr = '';
+    if(msg && msg.length){
+      msgStr = msg;
+    }
+    this.props.handleNotificationClose(val, msgStr);
+  }
+
+  reserRegForm(){
+    this.props.resetRegistrationForm();
+  }
+
   render() {
-    const { firstName, lastName, email, address, mobile, showNotification, regUserResponse } = this.props;
+    const { firstName, lastName, email, address, mobile, password, notifyMessage, showNotification } = this.props;
     return <div>
-        <TextField hintText="First Name" name="firstName" onChange={e => this.changeField(e)} value={firstName} />
+        <TextField hintText="First Name" name="firstName" onChange={e => this.changeField(e)} value={firstName} floatingLabelText="First Name" />
         <br />
-        <TextField hintText="Last Name" name="lastName" onChange={e => this.changeField(e)} value={lastName} />
+        <TextField hintText="Last Name" name="lastName" onChange={e => this.changeField(e)} value={lastName} floatingLabelText="Last Name" />
         <br />
-        <TextField hintText="Email" name="email" onChange={e => this.changeField(e)} value={email} />
+        <TextField hintText="Email" name="email" onChange={e => this.changeField(e)} value={email} floatingLabelText="Email" />
         <br />
-        <TextField hintText="Address" name="address" onChange={e => this.changeField(e)} value={address} />
+        <TextField hintText="Password" name="password" onChange={e => this.changeField(e)} value={password} type="password" floatingLabelText="Password" />
         <br />
-        <TextField hintText="Mobile" name="mobile" onChange={e => this.changeField(e)} value={mobile} />
+        <TextField hintText="Address" name="address" onChange={e => this.changeField(e)} value={address} floatingLabelText="Address" />
+        <br />
+        <TextField hintText="Mobile" name="mobile" onChange={e => this.changeField(e)} value={mobile} floatingLabelText="Mobile" />
         <br />
         <RaisedButton label="Register" primary={true} style={style} onClick={() => this.registerUser()} />
         <RaisedButton label="Clear" secondary={true} style={style} onClick={() => {
             this.clearRegistrationForm();
           }} />
-        <Snackbar open={showNotification} message={ regUserResponse.data ? regUserResponse.data.message : ''} autoHideDuration={4000} onRequestClose={this.props.handleNotificationClose} />
+        <RaisedButton label="Reset" secondary={true} style={style} onClick={() => {
+            this.reserRegForm();
+          }} />
+        <Snackbar open={showNotification} message={ notifyMessage } autoHideDuration={4000} onRequestClose={()=>this.toggleNotification(false)} />
       </div>;
   }
 }
 
 const mapStateToProps = ({regUserReducer}) => {
-	const {firstName, lastName, email, mobile, address, showNotification, regUserResponse} = regUserReducer;
+	const {firstName, lastName, email, mobile, address, password, notifyMessage, showNotification} = regUserReducer;
 
-	return {firstName, lastName, email, mobile, address, showNotification, regUserResponse};
+	return {firstName, lastName, email, mobile, address, password, notifyMessage, showNotification};
 }
 
 export default withRouter(
@@ -64,6 +86,7 @@ export default withRouter(
     fillDetails,
     registerUsers,
     clearRegistrationForm,
-    handleNotificationClose
+    handleNotificationClose,
+    resetRegistrationForm
   })(Register)
 );

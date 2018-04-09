@@ -27,6 +27,10 @@ export const clearRegistrationForm = () => {
 	}
 }
 
-export const handleNotificationClose = () => {
-	return { type: "SHOW_NOTIFICATION", val: false };
+export const handleNotificationClose = (val, msg) => {
+	return { type: "TOGGLE_NOTIFICATION", val: val, msg: msg };
+}
+
+export const resetRegistrationForm = () => {
+	return {type: 'RESET_REGISTRATION_FORM'}
 }
